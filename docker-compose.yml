@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/backend/app:/backend/app
+    env_file: .docker.env
+    ports:
+      - ${BACKEND_PORT:-5000}:${BACKEND_PORT:-5000}
+    networks:
+      local:
+        ipv4_address: 192.168.101.10
+
+  database:
+    image: postgres:13
+    env_file: .docker.env
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data/
+    networks:
+      local:
+        ipv4_address: 192.168.101.20
+
+volumes:
+  db:
+
+networks:
+  local:
+    name: fastapi_ddd_network
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.101.0/20
