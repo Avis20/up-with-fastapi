@@ -2,6 +2,7 @@ version: '3.8'
 services:
 
   backend:
+    restart: unless-stopped
     build:
       context: ./src/backend
       dockerfile: Dockerfile
@@ -15,6 +16,7 @@ services:
         ipv4_address: 192.168.101.10
 
   database:
+    restart: unless-stopped
     image: postgres:13
     env_file: .docker.env
     ports:
